@@ -1,10 +1,967 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Oficial Contacto</title>
-  </head>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>_Proyecter | Desarrollo Web, Bots & Sistemas a Medida</title>
+    <!-- Google Fonts: Inter & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#0a0a0f',
+                        darkCard: '#11131f',
+                        darkCardHover: '#181b2c',
+                        violetAccent: '#8B5CF6',
+                        blueElectric: '#3B82F6',
+                        muted: '#94a3b8'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Deshabilitar scroll suave para cambios de sección instantáneos */
+        html, body {
+            scroll-behavior: auto !important;
+            background-color: #0a0a0f;
+            background-image: 
+                linear-gradient(to right, rgba(139, 92, 246, 0.04) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(59, 130, 246, 0.04) 1px, transparent 1px);
+            background-size: 32px 32px;
+            color: #f8fafc;
+            margin: 0;
+            padding: 0;
+        }
 
-<body>
-  <h1>Hola</h1>
+        /* Gradientes y Neón */
+        .gradient-text {
+            background: linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gradient-btn {
+            background: linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%);
+            transition: all 0.3s ease;
+        }
+        .gradient-btn:hover {
+            box-shadow: 0 0 25px rgba(139, 92, 246, 0.45);
+            transform: translateY(-2px);
+        }
+
+        .tech-card {
+            transition: all 0.3s ease;
+            background: #11131f;
+            border: 1px solid rgba(255, 255, 255, 0.07);
+        }
+        .tech-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(139, 92, 246, 0.5);
+            box-shadow: 0 10px 30px -10px rgba(139, 92, 246, 0.25);
+        }
+
+        /* Control de secciones SPA */
+        .spa-section {
+            display: none !important;
+        }
+        .spa-section.active-section {
+            display: block !important;
+        }
+
+        /* Tabs de Servicios */
+        .service-tab {
+            background-color: rgba(255, 255, 255, 0.02);
+            color: #94a3b8;
+            border-color: rgba(255, 255, 255, 0.05);
+        }
+        .service-tab:hover {
+            color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+        .service-tab.active {
+            background-color: #11131f;
+            color: #8B5CF6;
+            border-color: rgba(139, 92, 246, 0.5);
+            box-shadow: 0 0 20px -5px rgba(139, 92, 246, 0.2);
+        }
+
+        .service-content {
+            display: none;
+            opacity: 0;
+            transform: translateY(12px);
+            transition: opacity 0.35s ease, transform 0.35s ease;
+        }
+        .service-content.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Ocultar barra de scroll */
+        .scrollbar-none::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-none {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Transición Sidebar & Modales */
+        #sidebar {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        #sidebar-overlay, #modal-overlay {
+            transition: opacity 0.3s ease;
+        }
+
+        /* Animación Check Exitoso */
+        @keyframes strokeCheck {
+            100% { stroke-dashoffset: 0; }
+        }
+        .animate-check {
+            stroke-dasharray: 100;
+            stroke-dashoffset: 100;
+            animation: strokeCheck 0.6s ease-in-out forwards;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased selection:bg-violetAccent selection:text-white">
+
+    <!-- MODAL CONFIRMACIÓN DE SELECCIÓN DE COMPRA -->
+    <div id="modal-overlay" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden opacity-0 flex items-center justify-center p-4">
+        <div class="tech-card p-8 rounded-3xl max-w-md w-full border border-violetAccent/40 shadow-2xl relative transform transition-transform scale-95" id="modal-box">
+            <div class="w-14 h-14 rounded-2xl bg-violetAccent/20 border border-violetAccent/40 text-violetAccent flex items-center justify-center text-2xl font-mono mb-4">
+                🛒
+            </div>
+            <span class="font-mono text-xs text-violetAccent tracking-wider uppercase">// ÍTEM SELECCIONADO</span>
+            <h3 id="modal-product-name" class="text-2xl font-bold text-white mt-1 mb-2"></h3>
+            <p class="text-muted text-sm mb-6">Confirmá tu elección para completar el formulario de contratación.</p>
+            
+            <div class="p-4 rounded-xl bg-darkBg border border-white/10 flex items-center justify-between font-mono mb-6">
+                <span class="text-xs text-muted">Monto total:</span>
+                <span id="modal-product-price" class="text-xl font-bold text-violetAccent"></span>
+            </div>
+
+            <div class="flex flex-col gap-3">
+                <button id="modal-confirm-btn" type="button" class="w-full py-3.5 rounded-xl gradient-btn text-white font-bold font-mono text-sm shadow-lg shadow-violetAccent/20 cursor-pointer">
+                    Ir al Formulario →
+                </button>
+                <button id="modal-cancel-btn" type="button" class="w-full py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-muted hover:text-white font-mono text-xs transition-all cursor-pointer">
+                    Seguir explorando
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOTÓN DE MENÚ HAMBURGUESA FIJO -->
+    <button id="sidebar-open-btn" type="button" class="fixed top-5 left-5 z-50 p-3 rounded-xl bg-darkCard/90 border border-white/10 text-white hover:border-violetAccent/50 backdrop-blur-md shadow-lg transition-all focus:outline-none cursor-pointer">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+    </button>
+
+    <!-- OVERLAY DEL SIDEBAR -->
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden opacity-0"></div>
+
+    <!-- MENÚ LATERAL DESPLEGABLE -->
+    <aside id="sidebar" class="fixed top-0 left-0 bottom-0 w-80 bg-darkCard border-r border-white/10 z-50 transform -translate-x-full p-8 flex flex-col justify-between">
+        <div>
+            <div class="flex items-center justify-between mb-10">
+                <button type="button" data-nav="hero" class="spa-nav-link font-mono text-xl font-bold tracking-tight text-white flex items-center gap-2 cursor-pointer border-none bg-transparent p-0">
+                    <span class="gradient-text">_</span>Proyecter<span class="text-violetAccent animate-pulse">_</span>
+                </button>
+                <button id="sidebar-close-btn" type="button" class="text-muted hover:text-white transition-colors cursor-pointer">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <nav class="flex flex-col gap-3 font-mono text-sm">
+                <button type="button" data-nav="hero" class="spa-nav-link text-left py-2.5 px-3 rounded-lg hover:bg-white/5 text-muted hover:text-violetAccent transition-all cursor-pointer">// Inicio</button>
+                <button type="button" data-nav="ventas-negocios" class="spa-nav-link text-left py-2.5 px-3 rounded-lg hover:bg-white/5 text-muted hover:text-violetAccent transition-all cursor-pointer">// Perfiles & Negocios</button>
+                <button type="button" data-nav="servicios" class="spa-nav-link text-left py-2.5 px-3 rounded-lg hover:bg-white/5 text-muted hover:text-violetAccent transition-all cursor-pointer">// Servicios</button>
+                <button type="button" data-nav="bots-scripts" class="spa-nav-link text-left py-2.5 px-3 rounded-lg hover:bg-white/5 text-muted hover:text-violetAccent transition-all cursor-pointer">// Bots y Scripts</button>
+                <button type="button" data-nav="proyectos" class="spa-nav-link text-left py-2.5 px-3 rounded-lg hover:bg-white/5 text-muted hover:text-violetAccent transition-all cursor-pointer">// Proyectos</button>
+                <button type="button" data-nav="planes" class="spa-nav-link text-left py-2.5 px-3 rounded-lg hover:bg-white/5 text-muted hover:text-violetAccent transition-all cursor-pointer">// Precios Web</button>
+                <button type="button" data-nav="contacto" class="spa-nav-link text-left py-2.5 px-3 rounded-lg bg-violetAccent/10 text-violetAccent border border-violetAccent/30 hover:bg-violetAccent hover:text-white transition-all mt-4 text-center cursor-pointer">// Contacto</button>
+            </nav>
+        </div>
+        <div class="font-mono text-xs text-muted">
+            <p>_Proyecter SPA v3.6</p>
+            <p class="mt-1">Desarrollo & Automatizaciones</p>
+        </div>
+    </aside>
+
+    <!-- HEADER / NAVBAR TOP -->
+    <header class="fixed top-0 left-0 right-0 z-40 bg-darkBg/90 backdrop-blur-md border-b border-white/10 pl-20 pr-6 h-20 flex items-center justify-between">
+        <button type="button" data-nav="hero" class="spa-nav-link font-mono text-xl font-bold tracking-tight text-white flex items-center gap-2 cursor-pointer border-none bg-transparent p-0">
+            <span class="gradient-text">_</span>Proyecter<span class="text-violetAccent animate-pulse">_</span>
+        </button>
+        <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-muted font-mono">
+            <button type="button" data-nav="hero" class="spa-nav-link hover:text-violetAccent transition-colors cursor-pointer">// inicio</button>
+            <button type="button" data-nav="servicios" class="spa-nav-link hover:text-violetAccent transition-colors cursor-pointer">// servicios</button>
+            <button type="button" data-nav="bots-scripts" class="spa-nav-link hover:text-violetAccent transition-colors cursor-pointer">// bots & scripts</button>
+            <button type="button" data-nav="proyectos" class="spa-nav-link hover:text-violetAccent transition-colors cursor-pointer">// proyectos</button>
+            <button type="button" data-nav="planes" class="spa-nav-link hover:text-violetAccent transition-colors cursor-pointer">// precios</button>
+            <button type="button" data-nav="contacto" class="spa-nav-link text-white bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg border border-white/10 transition-all cursor-pointer">// contacto</button>
+        </nav>
+    </header>
+
+    <main class="min-h-screen">
+
+        <!-- 1. VISTA HERO / INICIO -->
+        <section id="hero" class="spa-section active-section pt-28 pb-12 relative min-h-[80vh] flex items-center justify-center px-6 overflow-hidden">
+            <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20">
+                <div class="w-[500px] h-[500px] bg-violetAccent rounded-full blur-[140px]"></div>
+            </div>
+            <div class="max-w-4xl mx-auto text-center relative z-10">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violetAccent/10 border border-violetAccent/30 text-violetAccent font-mono text-xs mb-6">
+                    <span class="w-2 h-2 rounded-full bg-violetAccent animate-ping"></span>
+                    DISPONIBLE PARA NUEVOS PROYECTOS
+                </div>
+                <h1 class="text-4xl md:text-6xl font-bold tracking-tight text-white mb-6 leading-tight">
+                    Desarrollos web, bots y sistemas que <span class="gradient-text">escalan tu negocio</span>.
+                </h1>
+                <p class="text-lg md:text-xl text-muted mb-10 max-w-2xl mx-auto">
+                    Código limpio, arquitectura sólida y automatización sin vueltas ni intermediarios.
+                </p>
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <button type="button" data-nav="contacto" class="spa-nav-link w-full sm:w-auto px-8 py-4 rounded-xl gradient-btn text-white font-bold text-center cursor-pointer">
+                        Iniciar Proyecto
+                    </button>
+                    <button type="button" data-nav="servicios" class="spa-nav-link w-full sm:w-auto px-8 py-4 rounded-xl bg-darkCard hover:bg-darkCardHover border border-white/10 text-white font-medium transition-all text-center cursor-pointer">
+                        Explorar Servicios
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. VISTA VENTAS / NEGOCIOS & EMPRESAS (DETALLADO CON PRECIO AJUSTADO A $1.000 USD) -->
+        <section id="ventas-negocios" class="spa-section pt-28 pb-16 px-6 max-w-7xl mx-auto">
+            <div class="mb-10">
+                <span class="font-mono text-violetAccent text-sm tracking-wider">// 01. SOLUCIONES POR PERFIL</span>
+                <h2 class="text-3xl font-bold text-white mt-2 gradient-text">¿Qué necesitás?</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Pack Local -->
+                <div class="tech-card p-6 rounded-2xl flex flex-col justify-between">
+                    <div>
+                        <div class="w-10 h-10 rounded-lg bg-violetAccent/10 text-violetAccent flex items-center justify-center font-mono font-bold mb-4">01</div>
+                        <h3 class="text-xl font-bold text-white mb-2">Pack Local</h3>
+                        <p class="text-muted text-sm mb-4">Presencia online sólida y profesional para negocios de cercanía y profesionales.</p>
+                        <ul class="space-y-2 text-xs text-muted mb-6 font-mono border-t border-white/5 pt-4">
+                            <li class="flex items-center gap-1.5"><span class="text-violetAccent">✓</span> Sitio Web Responsive</li>
+                            <li class="flex items-center gap-1.5"><span class="text-violetAccent">✓</span> Botón directo a WhatsApp</li>
+                            <li class="flex items-center gap-1.5"><span class="text-violetAccent">✓</span> Mapa & Ubicación Google</li>
+                            <li class="flex items-center gap-1.5"><span class="text-violetAccent">✓</span> Formulario de Contacto</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <div class="pt-4 border-t border-white/10 flex items-center justify-between mb-4">
+                            <span class="text-xs font-mono text-muted">Precio</span>
+                            <span class="font-mono text-lg font-bold text-violetAccent">$499 USD</span>
+                        </div>
+                        <button type="button" data-buy="Pack Local" data-price="$499 USD" class="buy-btn w-full py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-center text-white text-xs font-mono transition-all cursor-pointer">Seleccionar →</button>
+                    </div>
+                </div>
+
+                <!-- Pack Empresa -->
+                <div class="tech-card p-6 rounded-2xl flex flex-col justify-between border-violetAccent/30">
+                    <div>
+                        <div class="w-10 h-10 rounded-lg bg-violetAccent/10 text-violetAccent flex items-center justify-center font-mono font-bold mb-4">02</div>
+                        <h3 class="text-xl font-bold text-white mb-2">Pack Empresa</h3>
+                        <p class="text-muted text-sm mb-4">Sistemas corporativos robustos e integraciones para optimizar tu operativa.</p>
+                        <ul class="space-y-2 text-xs text-muted mb-6 font-mono border-t border-white/5 pt-4">
+                            <li class="flex items-center gap-1.5"><span class="text-violetAccent">✓</span> Web Multipágina completa</li>
+                            <li class="flex items-center gap-1.5"><span class="text-violetAccent">✓</span> Panel de Control / Admin</li>
+                            <li class="flex items-center gap-1.5"><span class="text-violetAccent">✓</span> Integración con APIs & BD</li>
+                            <li class="flex items-center gap-1.5"><span class="text-violetAccent">✓</span> Soporte Prioritario</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <div class="pt-4 border-t border-white/10 flex items-center justify-between mb-4">
+                            <span class="text-xs font-mono text-muted">Precio</span>
+                            <span class="font-mono text-lg font-bold text-violetAccent">$799 USD</span>
+                        </div>
+                        <button type="button" data-buy="Pack Empresa" data-price="$799 USD" class="buy-btn w-full py-2.5 rounded-xl gradient-btn text-center text-white text-xs font-mono font-bold transition-all cursor-pointer">Seleccionar →</button>
+                    </div>
+                </div>
+
+                <!-- Pack Idea / Proyecto ($1.000 USD) -->
+                <div class="tech-card p-6 rounded-2xl flex flex-col justify-between">
+                    <div>
+                        <div class="w-10 h-10 rounded-lg bg-violetAccent/10 text-violetAccent flex items-center justify-center font-mono font-bold mb-4">03</div>
+                        <h3 class="text-xl font-bold text-white mb-2">Pack Idea / Proyecto</h3>
+                        <p class="text-muted text-sm mb-4">Arquitectura desde cero para transformar tu visión inicial en software funcional.</p>
+                        <ul class="space-y-2 text-xs text-muted mb-6 font-mono border-t border-white/5 pt-4">
+                            <li class="flex items-center gap-1.5"><span class="text-violetAccent">✓</span> Diseño UI/UX Customizado</li>
+                            <li class="flex items-center gap-1.5"><span class="text-violetAccent">✓</span> Desarrollo Frontend & Backend</li>
+                            <li class="flex items-center gap-1.5"><span class="text-violetAccent">✓</span> Base de Datos dedicada</li>
+                            <li class="flex items-center gap-1.5"><span class="text-violetAccent">✓</span> Documentación Técnica</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <div class="pt-4 border-t border-white/10 flex items-center justify-between mb-4">
+                            <span class="text-xs font-mono text-muted">Precio</span>
+                            <span class="font-mono text-lg font-bold text-violetAccent">$1.000 USD</span>
+                        </div>
+                        <button type="button" data-buy="Pack Idea / Proyecto" data-price="$1.000 USD" class="buy-btn w-full py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-center text-white text-xs font-mono transition-all cursor-pointer">Seleccionar →</button>
+                    </div>
+                </div>
+
+                <!-- Pack MVP Startup -->
+                <div class="tech-card p-6 rounded-2xl flex flex-col justify-between">
+                    <div>
+                        <div class="w-10 h-10 rounded-lg bg-violetAccent/10 text-violetAccent flex items-center justify-center font-mono font-bold mb-4">04</div>
+                        <h3 class="text-xl font-bold text-white mb-2">Pack MVP Startup</h3>
+                        <p class="text-muted text-sm mb-4">Producto Mínimo Viable completo listo para validar con clientes e inversores.</p>
+                        <ul class="space-y-2 text-xs text-muted mb-6 font-mono border-t border-white/5 pt-4">
+                            <li class="flex items-center gap-1.5"><span class="text-violetAccent">✓</span> Plataforma SaaS o App Web</li>
+                            <li class="flex items-center gap-1.5"><span class="text-violetAccent">✓</span> Pasarela de Pagos (Stripe/MP)</li>
+                            <li class="flex items-center gap-1.5"><span class="text-violetAccent">✓</span> Autenticación de Usuarios</li>
+                            <li class="flex items-center gap-1.5"><span class="text-violetAccent">✓</span> Despliegue en Servidor</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <div class="pt-4 border-t border-white/10 flex items-center justify-between mb-4">
+                            <span class="text-xs font-mono text-muted">Precio</span>
+                            <span class="font-mono text-lg font-bold text-violetAccent">$1.499 USD</span>
+                        </div>
+                        <button type="button" data-buy="Pack MVP Startup" data-price="$1.499 USD" class="buy-btn w-full py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-center text-white text-xs font-mono transition-all cursor-pointer">Seleccionar →</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. VISTA SERVICIOS -->
+        <section id="servicios" class="spa-section pt-28 pb-16 px-6 max-w-7xl mx-auto">
+            <div class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
+                <div>
+                    <div class="flex items-center gap-3">
+                        <span class="font-mono text-violetAccent text-sm tracking-wider">// 02. CAPACIDADES</span>
+                        <span class="px-2.5 py-0.5 rounded-full bg-violetAccent/20 border border-violetAccent/40 font-mono text-xs text-violetAccent font-bold animate-pulse">PRÓXIMAMENTE</span>
+                    </div>
+                    <h2 class="text-3xl font-bold text-white mt-2 gradient-text">// SERVICIOS</h2>
+                </div>
+                <p class="text-muted font-mono text-sm max-w-md">Códigos que solucionan problemas comunes de scripts.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                <div class="lg:col-span-4 flex lg:flex-col gap-2 overflow-x-auto pb-4 lg:pb-0 scrollbar-none border-b lg:border-b-0 lg:border-r border-white/10 pr-0 lg:pr-6">
+                    <button type="button" class="service-tab active font-mono text-sm text-left px-5 py-4 rounded-xl border transition-all whitespace-nowrap flex items-center gap-3 w-full cursor-pointer" data-target="service-1">
+                        <span class="text-xs text-violetAccent">01.</span>
+                        <span>Páginas y Sistemas Web</span>
+                    </button>
+                    <button type="button" class="service-tab font-mono text-sm text-left px-5 py-4 rounded-xl border transition-all whitespace-nowrap flex items-center gap-3 w-full cursor-pointer" data-target="service-2">
+                        <span class="text-xs text-violetAccent">02.</span>
+                        <span>Conexiones y APIs</span>
+                    </button>
+                    <button type="button" class="service-tab font-mono text-sm text-left px-5 py-4 rounded-xl border transition-all whitespace-nowrap flex items-center gap-3 w-full cursor-pointer" data-target="service-3">
+                        <span class="text-xs text-violetAccent">03.</span>
+                        <span>Automatizaciones y Bots</span>
+                    </button>
+                    <button type="button" class="service-tab font-mono text-sm text-left px-5 py-4 rounded-xl border transition-all whitespace-nowrap flex items-center gap-3 w-full cursor-pointer" data-target="service-4">
+                        <span class="text-xs text-violetAccent">04.</span>
+                        <span>Diseño Limpio e Intuitivo</span>
+                    </button>
+                </div>
+
+                <div class="lg:col-span-8 min-h-[320px]">
+                    <div id="service-1" class="service-content active tech-card p-8 md:p-10 rounded-2xl relative overflow-hidden">
+                        <div class="w-14 h-14 rounded-xl bg-violetAccent/10 text-violetAccent flex items-center justify-center mb-6 border border-violetAccent/20">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                        </div>
+                        <div class="font-mono text-xs text-violetAccent mb-2">// 01. DESARROLLO WEB</div>
+                        <h3 class="text-2xl md:text-3xl font-bold text-white mb-4">Páginas y Sistemas Web</h3>
+                        <p class="text-muted text-base leading-relaxed mb-6">
+                            Sitios web modernos y sistemas hechos desde cero. Nada de plantillas baratas ni lentas. Diseñamos e implementamos código limpio, optimizado para cargar al instante.
+                        </p>
+                        <div class="flex flex-wrap items-center gap-3 font-mono text-xs text-violetAccent pt-4 border-t border-white/5">
+                            <span>⚡ Carga Inmediata</span> • <span>📱 Mobile First</span> • <span>🔐 Código a Medida</span>
+                        </div>
+                    </div>
+
+                    <div id="service-2" class="service-content tech-card p-8 md:p-10 rounded-2xl relative overflow-hidden">
+                        <div class="w-14 h-14 rounded-xl bg-violetAccent/10 text-violetAccent flex items-center justify-center mb-6 border border-violetAccent/20">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        </div>
+                        <div class="font-mono text-xs text-violetAccent mb-2">// 02. INTEGRACIONES</div>
+                        <h3 class="text-2xl md:text-3xl font-bold text-white mb-4">Conexiones y APIs</h3>
+                        <p class="text-muted text-base leading-relaxed mb-6">
+                            Conectamos tus programas, bases de datos o sistemas para que compartan información automáticamente. Sincronizamos tu flujo operativo eliminando intermediarios.
+                        </p>
+                        <div class="flex flex-wrap items-center gap-3 font-mono text-xs text-violetAccent pt-4 border-t border-white/5">
+                            <span>🔄 Sincronización Automática</span> • <span>🔌 APIs REST & Webhooks</span>
+                        </div>
+                    </div>
+
+                    <div id="service-3" class="service-content tech-card p-8 md:p-10 rounded-2xl relative overflow-hidden">
+                        <div class="w-14 h-14 rounded-xl bg-violetAccent/10 text-violetAccent flex items-center justify-center mb-6 border border-violetAccent/20">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        </div>
+                        <div class="font-mono text-xs text-violetAccent mb-2">// 03. PRODUCTIVIDAD</div>
+                        <h3 class="text-2xl md:text-3xl font-bold text-white mb-4">Automatizaciones y Bots</h3>
+                        <p class="text-muted text-base leading-relaxed mb-6">
+                            Programas que hacen el trabajo aburrido por vos: enviar mensajes, guardar datos o crear reportes. Reducimos los tiempos muertos en la rutina diaria.
+                        </p>
+                        <div class="flex flex-wrap items-center gap-3 font-mono text-xs text-violetAccent pt-4 border-t border-white/5">
+                            <span>🤖 Flujos Eficientes</span> • <span>📊 Generación de Reportes</span>
+                        </div>
+                    </div>
+
+                    <div id="service-4" class="service-content tech-card p-8 md:p-10 rounded-2xl relative overflow-hidden">
+                        <div class="w-14 h-14 rounded-xl bg-violetAccent/10 text-violetAccent flex items-center justify-center mb-6 border border-violetAccent/20">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"></path></svg>
+                        </div>
+                        <div class="font-mono text-xs text-violetAccent mb-2">// 04. EXPERIENCIA DE USUARIO</div>
+                        <h3 class="text-2xl md:text-3xl font-bold text-white mb-4">Diseño Limpio e Intuitivo</h3>
+                        <p class="text-muted text-base leading-relaxed mb-6">
+                            Interfaces fáciles de usar para tus clientes o empleados, rápidas y que andan genial en celular. Navegación clara, fluida y sin fricciones.
+                        </p>
+                        <div class="flex flex-wrap items-center gap-3 font-mono text-xs text-violetAccent pt-4 border-t border-white/5">
+                            <span>🎨 Arquitectura UX/UI</span> • <span>📲 Adaptabilidad Móvil</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. VISTA "BOTS Y SCRIPTS" -->
+        <section id="bots-scripts" class="spa-section pt-28 pb-16 px-6 max-w-7xl mx-auto">
+            <div class="p-8 md:p-12 rounded-3xl bg-darkCard/90 border border-violetAccent/30 shadow-2xl relative overflow-hidden">
+                <div class="absolute -right-20 -bottom-20 w-96 h-96 bg-violetAccent/10 rounded-full blur-[100px] pointer-events-none"></div>
+                
+                <div class="mb-10 relative z-10">
+                    <span class="font-mono text-violetAccent text-sm tracking-wider">// 03. MÓDULOS DE AUTOMATIZACIÓN</span>
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mt-2 gradient-text">// BOTS Y SCRIPTS</h2>
+                    <p class="text-muted text-sm mt-2">Soluciones de software especializadas, listas para desplegar o desarrolladas a medida bajo requerimiento.</p>
+                </div>
+
+                <!-- BOTS A MEDIDA -->
+                <div class="mb-16 relative z-10">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6 pb-3 border-b border-white/10">
+                        <h3 class="text-xl font-bold text-white font-mono flex items-center gap-2">
+                            <span class="text-violetAccent">#</span> Bots a Medida
+                        </h3>
+                        <span class="text-xs font-mono px-3 py-1 rounded-full bg-violetAccent/10 border border-violetAccent/20 text-violetAccent">Pago único • Anticipo del 50%</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="tech-card p-6 rounded-2xl flex flex-col justify-between">
+                            <div>
+                                <span class="font-mono text-xs text-violetAccent">NIVEL 01</span>
+                                <h4 class="text-lg font-bold text-white mt-1 mb-2">Bot Normal</h4>
+                                <p class="text-muted text-sm mb-6">Para tareas básicas, scraping sencillo o respuestas automáticas simples.</p>
+                            </div>
+                            <div>
+                                <div class="font-mono text-3xl font-bold text-white mb-4">$100 <span class="text-xs text-muted">USD</span></div>
+                                <button type="button" data-buy="Bot Normal" data-price="$100 USD" class="buy-btn w-full py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-center text-white text-sm font-medium transition-all cursor-pointer">Encargar Bot</button>
+                            </div>
+                        </div>
+
+                        <div class="tech-card p-6 rounded-2xl flex flex-col justify-between border-violetAccent/50 relative shadow-lg">
+                            <div class="absolute -top-3 left-1/2 -translate-x-1/2 gradient-btn text-white font-mono text-xs font-bold px-3 py-0.5 rounded-full">
+                                RECOMENDADO
+                            </div>
+                            <div>
+                                <span class="font-mono text-xs text-violetAccent">NIVEL 02</span>
+                                <h4 class="text-lg font-bold text-white mt-1 mb-2">Bot con Seguridad</h4>
+                                <p class="text-muted text-sm mb-6">Protección, monitoreo constante, cifrado de credenciales y prevención de bloqueos.</p>
+                            </div>
+                            <div>
+                                <div class="font-mono text-3xl font-bold text-violetAccent mb-4">$599 <span class="text-xs text-muted">USD</span></div>
+                                <button type="button" data-buy="Bot con Seguridad" data-price="$599 USD" class="buy-btn w-full py-2.5 rounded-xl gradient-btn text-center text-white text-sm font-bold cursor-pointer">Encargar Bot</button>
+                            </div>
+                        </div>
+
+                        <div class="tech-card p-6 rounded-2xl flex flex-col justify-between">
+                            <div>
+                                <span class="font-mono text-xs text-violetAccent">NIVEL 03</span>
+                                <h4 class="text-lg font-bold text-white mt-1 mb-2">Bot Alta Complejidad</h4>
+                                <p class="text-muted text-sm mb-6">Integraciones con múltiples APIs externas, bases de datos avanzadas y panel Web.</p>
+                            </div>
+                            <div>
+                                <div class="font-mono text-3xl font-bold text-white mb-4">$799 <span class="text-xs text-muted">USD</span></div>
+                                <button type="button" data-buy="Bot Alta Complejidad" data-price="$799 USD" class="buy-btn w-full py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-center text-white text-sm font-medium transition-all cursor-pointer">Encargar Bot</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SCRIPTS DE SOLUCIÓN RÁPIDA -->
+                <div class="relative z-10">
+                    <div class="mb-6 pb-3 border-b border-white/10">
+                        <h3 class="text-xl font-bold text-white font-mono flex items-center gap-2">
+                            <span class="text-blueElectric">#</span> Scripts de Solución Rápida
+                        </h3>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="tech-card p-8 rounded-2xl flex flex-col justify-between border-blueElectric/30">
+                            <div>
+                                <div class="flex justify-between items-start mb-4">
+                                    <span class="font-mono text-xs text-blueElectric bg-blueElectric/10 px-3 py-1 rounded-md">Suscripción</span>
+                                    <span class="font-mono text-2xl font-bold text-white">$89 <span class="text-xs text-muted">USD / mes</span></span>
+                                </div>
+                                <h4 class="text-2xl font-bold text-white mb-3">Script Mensual</h4>
+                                <p class="text-muted text-sm leading-relaxed mb-6">
+                                    Mantenimiento continuo para garantizar la ejecución permanente del código frente a modificaciones de plataformas externas.
+                                </p>
+                                <div class="p-4 rounded-xl bg-darkBg border border-amber-500/30 text-amber-200/90 font-mono text-xs leading-relaxed mb-6">
+                                    ⚠️ <strong class="text-amber-400">Aclaración:</strong> Incluye mantenimiento. NO incluye nuevas funciones ni cambios de diseño.
+                                </div>
+                            </div>
+                            <button type="button" data-buy="Script Mensual" data-price="$89 USD/mes" class="buy-btn w-full py-3 rounded-xl bg-white/10 hover:bg-white/20 text-center text-white font-medium transition-all cursor-pointer">Contratar Script Mensual</button>
+                        </div>
+
+                        <div class="tech-card p-8 rounded-2xl flex flex-col justify-between">
+                            <div>
+                                <div class="flex justify-between items-start mb-4">
+                                    <span class="font-mono text-xs text-violetAccent bg-violetAccent/10 px-3 py-1 rounded-md">Licencia Definitiva</span>
+                                    <span class="font-mono text-2xl font-bold text-white">$499 <span class="text-xs text-muted">USD</span></span>
+                                </div>
+                                <h4 class="text-2xl font-bold text-white mb-3">Script Pago Único</h4>
+                                <p class="text-muted text-sm leading-relaxed mb-6">
+                                    Entrega completa de código fuente documentado e instrucciones de despliegue. El código es tuyo para siempre sin cargos recurrentes.
+                                </p>
+                            </div>
+                            <button type="button" data-buy="Script Pago Único" data-price="$499 USD" class="buy-btn w-full py-3 rounded-xl gradient-btn text-center text-white font-bold cursor-pointer">Comprar Script Único</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 5. VISTA PROYECTOS -->
+        <section id="proyectos" class="spa-section pt-28 pb-16 px-6 max-w-7xl mx-auto">
+            <div class="mb-10">
+                <span class="font-mono text-violetAccent text-sm tracking-wider">// 04. PORTFOLIO</span>
+                <h2 class="text-3xl font-bold text-white mt-2 gradient-text">// PROYECTOS DESTACADOS</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="tech-card p-8 rounded-2xl flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="font-mono text-xs text-violetAccent bg-violetAccent/10 px-3 py-1 rounded-md">Web App</span>
+                            <span class="font-mono text-xs text-muted">2026</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-3">Portal de Gestión Web</h3>
+                        <p class="text-muted mb-6">Plataforma interna interactiva con control de inventario y analíticas en tiempo real para cliente corporativo.</p>
+                    </div>
+                    <div class="p-4 rounded-xl bg-darkBg border border-white/5 flex items-center justify-between font-mono text-sm">
+                        <span class="text-muted">Resultado:</span>
+                        <span class="text-violetAccent font-bold">+180% velocidad operativa</span>
+                    </div>
+                </div>
+
+                <div class="tech-card p-8 rounded-2xl flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="font-mono text-xs text-violetAccent bg-violetAccent/10 px-3 py-1 rounded-md">E-Commerce</span>
+                            <span class="font-mono text-xs text-muted">2026</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-3">E-Store Automatizado</h3>
+                        <p class="text-muted mb-6">Tienda online optimizada con pasarela de pagos integrada, gestión de stock y notificaciones automáticas.</p>
+                    </div>
+                    <div class="p-4 rounded-xl bg-darkBg border border-white/5 flex items-center justify-between font-mono text-sm">
+                        <span class="text-muted">Resultado:</span>
+                        <span class="text-violetAccent font-bold">+2.4x conversión inicial</span>
+                    </div>
+                </div>
+
+                <div class="tech-card p-8 rounded-2xl flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="font-mono text-xs text-violetAccent bg-violetAccent/10 px-3 py-1 rounded-md">Bot / API</span>
+                            <span class="font-mono text-xs text-muted">2026</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-3">Sistema de Integración API</h3>
+                        <p class="text-muted mb-6">Conexión de sistemas legados con APIs modernas de mensajería y bases de datos distribuidas.</p>
+                    </div>
+                    <div class="p-4 rounded-xl bg-darkBg border border-white/5 flex items-center justify-between font-mono text-sm">
+                        <span class="text-muted">Resultado:</span>
+                        <span class="text-violetAccent font-bold">0 errores en sincronización</span>
+                    </div>
+                </div>
+
+                <div class="tech-card p-8 rounded-2xl flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="font-mono text-xs text-violetAccent bg-violetAccent/10 px-3 py-1 rounded-md">MVP Startup</span>
+                            <span class="font-mono text-xs text-muted">2026</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-3">Plataforma SaaS MVP</h3>
+                        <p class="text-muted mb-6">Desarrollo desde cero del producto mínimo viable con autenticación, dashboard y panel de administración.</p>
+                    </div>
+                    <div class="p-4 rounded-xl bg-darkBg border border-white/5 flex items-center justify-between font-mono text-sm">
+                        <span class="text-muted">Resultado:</span>
+                        <span class="text-violetAccent font-bold">Lanzamiento en 3 semanas</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. VISTA PLANES -->
+        <section id="planes" class="spa-section pt-28 pb-16 px-6 max-w-7xl mx-auto">
+            <div class="mb-10">
+                <span class="font-mono text-violetAccent text-sm tracking-wider">// 05. INVERSIÓN WEB</span>
+                <h2 class="text-3xl font-bold text-white mt-2 gradient-text">// PLANES A TU MEDIDA</h2>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+                <!-- Plan Esencial -->
+                <div class="tech-card p-8 rounded-2xl flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-2">Esencial</h3>
+                        <p class="text-muted text-sm mb-6">Para negocios o ideas que necesitan despegar con calidad profesional inmediata.</p>
+                        <div class="font-mono text-4xl font-bold text-white mb-6">$499 <span class="text-xs text-muted">USD</span></div>
+                        <ul class="space-y-3 text-sm text-muted mb-8">
+                            <li class="flex items-center gap-2">✓ Landing / Web corporativa</li>
+                            <li class="flex items-center gap-2">✓ Diseño responsive optimizado</li>
+                            <li class="flex items-center gap-2">✓ Formulario de contacto integrado</li>
+                            <li class="flex items-center gap-2">✓ SEO básico inicial</li>
+                        </ul>
+                    </div>
+                    <button type="button" data-buy="Plan Esencial" data-price="$499 USD" class="buy-btn w-full py-3 rounded-xl bg-white/10 hover:bg-white/20 text-center text-white font-medium transition-all cursor-pointer">Seleccionar Plan</button>
+                </div>
+
+                <!-- Plan Avanzado -->
+                <div class="tech-card p-8 rounded-2xl flex flex-col justify-between border-violetAccent/50 relative shadow-xl shadow-violetAccent/5">
+                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 gradient-btn text-white font-mono text-xs font-bold px-3 py-1 rounded-full">
+                        MÁS POPULAR
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-2">Avanzado</h3>
+                        <p class="text-muted text-sm mb-6">Para empresas y proyectos con requerimientos de integración y mayor complejidad.</p>
+                        <div class="font-mono text-4xl font-bold text-violetAccent mb-6">$799 <span class="text-xs text-muted">USD</span></div>
+                        <ul class="space-y-3 text-sm text-muted mb-8">
+                            <li class="flex items-center gap-2">✓ Sistema web multipágina</li>
+                            <li class="flex items-center gap-2">✓ Conexión con APIs o base de datos</li>
+                            <li class="flex items-center gap-2">✓ Automatizaciones iniciales</li>
+                            <li class="flex items-center gap-2">✓ Soporte prioritario</li>
+                        </ul>
+                    </div>
+                    <button type="button" data-buy="Plan Avanzado" data-price="$799 USD" class="buy-btn w-full py-3 rounded-xl gradient-btn text-center text-white font-bold transition-all cursor-pointer">Seleccionar Plan</button>
+                </div>
+
+                <!-- Plan Complejo -->
+                <div class="tech-card p-8 rounded-2xl flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-2">Complejo / MVP</h3>
+                        <p class="text-muted text-sm mb-6">Desarrollo a gran escala para startups y software robusto desde cero.</p>
+                        <div class="font-mono text-4xl font-bold text-white mb-6">$1.499 <span class="text-xs text-muted">USD</span></div>
+                        <ul class="space-y-3 text-sm text-muted mb-8">
+                            <li class="flex items-center gap-2">✓ Arquitectura escalable completa</li>
+                            <li class="flex items-center gap-2">✓ Panel de administración a medida</li>
+                            <li class="flex items-center gap-2">✓ Integraciones complejas y bots</li>
+                            <li class="flex items-center gap-2">✓ Acompañamiento y mantenimiento</li>
+                        </ul>
+                    </div>
+                    <button type="button" data-buy="Plan Complejo / MVP" data-price="$1.499 USD" class="buy-btn w-full py-3 rounded-xl bg-white/10 hover:bg-white/20 text-center text-white font-medium transition-all cursor-pointer">Seleccionar Plan</button>
+                </div>
+            </div>
+
+            <div class="p-6 rounded-2xl bg-darkCard border border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-xl bg-violetAccent/10 text-violetAccent flex items-center justify-center font-mono font-bold shrink-0">ℹ️</div>
+                    <p class="text-sm text-muted">
+                        <strong class="text-white font-mono">Política de Cambios Post-Entrega:</strong> Incluye 1 cambio gratuito (ajustes menores). Cambios adicionales o nuevas funcionalidades: <strong class="text-white">$100 USD</strong> por cada uno.
+                    </p>
+                </div>
+                <button type="button" data-nav="contacto" class="spa-nav-link font-mono text-xs text-violetAccent hover:underline whitespace-nowrap cursor-pointer">Consultar dudas →</button>
+            </div>
+        </section>
+
+        <!-- 7. VISTA CONTACTO / FORMULARIO CON RESUMEN Y ANIMACIÓN -->
+        <section id="contacto" class="spa-section pt-28 pb-16 px-6 max-w-4xl mx-auto">
+            <div class="mb-10 text-center">
+                <span class="font-mono text-violetAccent text-sm tracking-wider">// 07. INICIAR COMUNICACIÓN</span>
+                <h2 class="text-3xl font-bold text-white mt-2 gradient-text">// CONTACTO & SOLICITUDES</h2>
+                <p class="text-muted mt-2">Completá los datos a continuación para ponernos en marcha inmediatamente.</p>
+            </div>
+
+            <!-- TARJETA DE RESUMEN DE COMPRA AUTOMÁTICA -->
+            <div id="purchase-summary" class="hidden mb-8 p-6 rounded-2xl bg-violetAccent/10 border border-violetAccent/40 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-violetAccent/20 text-violetAccent flex items-center justify-center font-mono text-xl shrink-0">🛒</div>
+                    <div>
+                        <span class="font-mono text-xs text-violetAccent uppercase tracking-wider">Resumen de Selección</span>
+                        <p id="summary-text" class="text-white font-bold text-base mt-0.5"></p>
+                    </div>
+                </div>
+                <button id="clear-selection-btn" type="button" class="font-mono text-xs text-muted hover:text-white underline cursor-pointer">Cambiar selección</button>
+            </div>
+
+            <!-- CONTENEDOR DEL FORMULARIO Y CONFIRMACIÓN -->
+            <div class="tech-card p-8 md:p-12 rounded-2xl relative">
+                
+                <!-- ANIMACIÓN DE ÉXITO -->
+                <div id="success-animation" class="hidden text-center py-12">
+                    <div class="w-20 h-20 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center mx-auto mb-6 border border-emerald-500/40 shadow-lg shadow-emerald-500/10">
+                        <svg class="w-10 h-10 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.5">
+                            <path class="animate-check" stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-2">¡Envío exitoso!</h3>
+                    <p class="text-muted text-sm max-w-md mx-auto mb-8">Tu solicitud ha sido recibida correctamente. Te contactaremos muy pronto para iniciar los detalles técnicos.</p>
+                    <button id="reset-form-btn" type="button" class="px-6 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-mono text-xs font-bold transition-all cursor-pointer">Enviar otra consulta</button>
+                </div>
+
+                <!-- FORMULARIO WEB3FORMS (FETCH) -->
+                <form id="contact-form" action="https://api.web3forms.com/submit" method="POST" class="space-y-6">
+                    <input type="hidden" name="access_key" value="cb792235-7121-4062-b5a0-65f143833a44">
+                    <input type="hidden" id="selected_product_field" name="producto_seleccionado" value="Consulta General">
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block font-mono text-xs text-muted mb-2">NOMBRE COMPLETO *</label>
+                            <input type="text" name="name" required class="w-full bg-darkBg border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-violetAccent transition-colors" placeholder="Tu nombre">
+                        </div>
+                        <div>
+                            <label class="block font-mono text-xs text-muted mb-2">EMAIL *</label>
+                            <input type="email" name="email" required class="w-full bg-darkBg border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-violetAccent transition-colors" placeholder="tucorreo@empresa.com">
+                        </div>
+                    </div>
+
+                    <!-- CAMPO OBLIGATORIO: PROYECTO / NEGOCIO / EMPRESA -->
+                    <div>
+                        <label class="block font-mono text-xs text-muted mb-2">NOMBRE DEL PROYECTO / NEGOCIO / EMPRESA *</label>
+                        <input type="text" name="project_name" required class="w-full bg-darkBg border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-violetAccent transition-colors" placeholder="Ej: MiMarca, StartupX, Proyecto Personal">
+                    </div>
+
+                    <div>
+                        <label class="block font-mono text-xs text-muted mb-2">MENSAJE / REQUERIMIENTOS *</label>
+                        <textarea name="message" rows="5" required class="w-full bg-darkBg border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-violetAccent transition-colors" placeholder="Contanos sobre las funciones específicas, alcance o detalles del proyecto..."></textarea>
+                    </div>
+
+                    <button id="submit-btn" type="submit" class="w-full py-4 rounded-xl gradient-btn text-white font-bold shadow-lg shadow-violetAccent/20 cursor-pointer flex items-center justify-center gap-2">
+                        <span id="btn-text">Enviar Mensaje</span>
+                        <div id="btn-spinner" class="hidden w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                    </button>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-white/10 py-12 px-6 bg-darkCard/50">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-sm text-muted">
+            <div class="font-mono text-white font-bold flex items-center gap-2">
+                <span class="gradient-text">_</span>Proyecter<span class="text-violetAccent">_</span>
+            </div>
+            <div>
+                © 2026 _Proyecter. Todos los derechos reservados.
+            </div>
+            <div class="flex items-center gap-6 font-mono text-xs">
+                <button type="button" data-nav="servicios" class="spa-nav-link hover:text-violetAccent transition-colors cursor-pointer">Servicios</button>
+                <button type="button" data-nav="bots-scripts" class="spa-nav-link hover:text-violetAccent transition-colors cursor-pointer">Bots & Scripts</button>
+                <button type="button" data-nav="contacto" class="spa-nav-link hover:text-violetAccent transition-colors cursor-pointer">Contacto</button>
+            </div>
+        </div>
+    </footer>
+
+    <!-- LOGICA JAVASCRIPT SPA + RESETEO DE SCROLL -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let tempProduct = "";
+            let tempPrice = "";
+
+            if (window.location.hash) {
+                history.replaceState(null, null, window.location.pathname);
+            }
+
+            const sections = document.querySelectorAll('.spa-section');
+            const navLinks = document.querySelectorAll('.spa-nav-link');
+
+            function navigateTo(targetId) {
+                if (window.location.hash) {
+                    history.replaceState(null, null, window.location.pathname);
+                }
+
+                sections.forEach(sec => sec.classList.remove('active-section'));
+
+                const activeSec = document.getElementById(targetId);
+                if (activeSec) {
+                    activeSec.classList.add('active-section');
+                }
+
+                window.scrollTo(0, 0);
+                document.documentElement.scrollTop = 0;
+                document.body.scrollTop = 0;
+
+                closeSidebar();
+            }
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const target = link.getAttribute('data-nav');
+                    if (target) navigateTo(target);
+                });
+            });
+
+            // SIDEBAR
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            const openBtn = document.getElementById('sidebar-open-btn');
+            const closeBtn = document.getElementById('sidebar-close-btn');
+
+            function openSidebar() {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+                setTimeout(() => overlay.classList.remove('opacity-0'), 10);
+            }
+
+            function closeSidebar() {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('opacity-0');
+                setTimeout(() => overlay.classList.add('hidden'), 300);
+            }
+
+            if (openBtn) openBtn.addEventListener('click', openSidebar);
+            if (closeBtn) closeBtn.addEventListener('click', closeSidebar);
+            if (overlay) overlay.addEventListener('click', closeSidebar);
+
+            // TABS SERVICIOS
+            const tabs = document.querySelectorAll('.service-tab');
+            const contents = document.querySelectorAll('.service-content');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    contents.forEach(c => c.classList.remove('active'));
+
+                    tab.classList.add('active');
+                    const targetId = tab.getAttribute('data-target');
+                    const targetContent = document.getElementById(targetId);
+                    if (targetContent) targetContent.classList.add('active');
+                });
+            });
+
+            // MODAL POP-UP Y COMPRA
+            const buyButtons = document.querySelectorAll('.buy-btn');
+            const modalOverlay = document.getElementById('modal-overlay');
+            const modalBox = document.getElementById('modal-box');
+            const modalProductName = document.getElementById('modal-product-name');
+            const modalProductPrice = document.getElementById('modal-product-price');
+            const modalConfirmBtn = document.getElementById('modal-confirm-btn');
+            const modalCancelBtn = document.getElementById('modal-cancel-btn');
+
+            const summaryBox = document.getElementById('purchase-summary');
+            const summaryText = document.getElementById('summary-text');
+            const selectedProductField = document.getElementById('selected_product_field');
+            const clearSelectionBtn = document.getElementById('clear-selection-btn');
+
+            function openModal(name, price) {
+                tempProduct = name;
+                tempPrice = price;
+                modalProductName.innerText = name;
+                modalProductPrice.innerText = price;
+
+                modalOverlay.classList.remove('hidden');
+                setTimeout(() => {
+                    modalOverlay.classList.remove('opacity-0');
+                    modalBox.classList.remove('scale-95');
+                }, 10);
+            }
+
+            function closeModal() {
+                modalOverlay.classList.add('opacity-0');
+                modalBox.classList.add('scale-95');
+                setTimeout(() => {
+                    modalOverlay.classList.add('hidden');
+                }, 300);
+            }
+
+            buyButtons.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const productName = btn.getAttribute('data-buy');
+                    const productPrice = btn.getAttribute('data-price');
+                    openModal(productName, productPrice);
+                });
+            });
+
+            modalCancelBtn.addEventListener('click', closeModal);
+
+            modalConfirmBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                closeModal();
+
+                summaryText.innerText = `Producto seleccionado: ${tempProduct} — Total: ${tempPrice}`;
+                selectedProductField.value = `${tempProduct} (${tempPrice})`;
+
+                summaryBox.classList.remove('hidden');
+                navigateTo('contacto');
+            });
+
+            clearSelectionBtn.addEventListener('click', () => {
+                summaryBox.classList.add('hidden');
+                selectedProductField.value = 'Consulta General';
+            });
+
+            // ENVÍO DE FORMULARIO WEB3FORMS (FETCH)
+            const contactForm = document.getElementById('contact-form');
+            const successAnimation = document.getElementById('success-animation');
+            const submitBtn = document.getElementById('submit-btn');
+            const btnText = document.getElementById('btn-text');
+            const btnSpinner = document.getElementById('btn-spinner');
+            const resetFormBtn = document.getElementById('reset-form-btn');
+
+            contactForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                submitBtn.disabled = true;
+                btnText.innerText = "Enviando...";
+                btnSpinner.classList.remove('hidden');
+
+                const formData = new FormData(contactForm);
+
+                try {
+                    const response = await fetch(contactForm.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    });
+
+                    if (response.ok) {
+                        contactForm.classList.add('hidden');
+                        successAnimation.classList.remove('hidden');
+                        contactForm.reset();
+                    } else {
+                        alert("Hubo un error al enviar el mensaje. Por favor intenta de nuevo.");
+                    }
+                } catch (error) {
+                    alert("Error de conexión. Revisa tu acceso a internet.");
+                } finally {
+                    submitBtn.disabled = false;
+                    btnText.innerText = "Enviar Mensaje";
+                    btnSpinner.classList.add('hidden');
+                }
+            });
+
+            resetFormBtn.addEventListener('click', () => {
+                successAnimation.classList.add('hidden');
+                contactForm.classList.remove('hidden');
+                summaryBox.classList.add('hidden');
+                selectedProductField.value = 'Consulta General';
+            });
+        });
+    </script>
 </body>
 </html>
